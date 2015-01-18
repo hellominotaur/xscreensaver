@@ -421,23 +421,19 @@ static void load_station_images(struct state *st)
     analogtv_input *input = st->stations[i];
 
     st->chansettings[i].image_loaded_p = True;
-    if (i == 0) {   /* station 0 is always colorbars */
-      input->updater = update_smpte_colorbars;
-      input->do_teletext=1;
-    }
+
 #ifdef USE_TEST_PATTERNS
-    else if (random()%5==0) {
+    if (random()%5==0) {
       j=random()%countof(test_patterns);
       analogtv_setup_sync(input);
       analogtv_load_xpm(tv, input, test_patterns[j]);
       analogtv_setup_teletext(input);
+      continue;
     }
 #endif
-    else {
-      analogtv_load_random_image(st);
-      input->do_teletext=1;
-      st->chansettings[i].image_loaded_p = False;
-    }
+    analogtv_load_random_image(st);
+    input->do_teletext=1;
+    st->chansettings[i].image_loaded_p = False;
   }
 }
 
